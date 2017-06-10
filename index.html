@@ -1,0 +1,45 @@
+<html>
+<head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+</head>
+<body>
+<div class = "output"></div>
+<label>input command : </label>
+<input id="textbox" class="input" type="text" size="50" />
+
+
+<script type="text/javascript">
+
+    $('#textbox').keypress(function(event){
+
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode == '13'){
+            var input = $(".input").val();
+            $(".output").append("<p> >"+input+"</p>");
+
+            $.ajax({
+                type:'POST',
+                url: 'http://localhost:3000/command/',
+                data: {"command":input},
+                crossDomain: true,
+                dataType: "json",
+                success: function(responseData) {
+                    console.log(responseData)
+                    $(".output").append("<p color:'red'> >"+responseData.replies+"</p>");
+                },
+                error: function (responseData) {
+                    console.log('fail');
+                    console.log(responseData)
+                }
+            });
+
+            $('.input').val('')
+        }
+        event.stopPropagation();
+    });
+
+</script>
+</body>
+</html>
